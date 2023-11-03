@@ -4,7 +4,8 @@ from django.db import models
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.CharField(max_length=200)
-    body = models.TextField()
+    author = models.CharField(max_length=100)
+    body = models.TextField(null=False,blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
