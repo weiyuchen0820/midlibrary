@@ -4,24 +4,34 @@
     <h3 style='font-family:標楷體;'>本站好書列表</a>
 {% endblock %}
 {% block content %} 
-{% for post in posts %}
+{% for book in book %}
     <div class='card'>
         <div class='card-header'>
             <p style='font-family:微軟正黑體;font-size:14pt;font-weight:bold;'>
-                <a href='/post/{{post.slug}}'>{{ post.title }}</a>
+                <a href='/book/{{book.slug}}'>{{ book.title }}</a>
             </p>
+        </div>
+
+        <div class='card-body' style='background-color:#ffffdd'>
+            <p>
+                {{ book.chap }}
+            </p>
+
+            <p>
+                {{ book.author }}
+            </p>
+            
+            <p>
+            {{ book.body | truncatechars:40 }}
+            </p>
+        </div> 
+
+        <div class='card-footer'  style='background-color:#efefef'>
+            <p>
+                出版日期：{{ book.pub_date | date:"Y M d"}}
+            </p>
+        </div>
     </div>
-    <div class='card-body' style='background-color:#ffffdd'>
-        <p>
-           {{ post.body | truncatechars:40 }}
-        </p>
-    </div>
-    <div class='card-footer'  style='background-color:#efefef'>
-        <p>
-            發佈時間：{{ post.pub_date | date:"Y M d, h:m:s"}}
-        </p>
-    </div>
-</div>
 <br>
 {% endfor %}
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.contrib import admin
-from mysite.models import Post
+from mysite.models import book
 # Register your models here.
 
-class PostAdmin(admin.ModelAdmin):
-    list_display = ('title','slug','pub_date')
-admin.site.register(Post, PostAdmin)
+class bookAdmin(admin.ModelAdmin):
+    list_display = ('title','slug','chap','author','body','pub_date')
+admin.site.register(book, bookAdmin)
