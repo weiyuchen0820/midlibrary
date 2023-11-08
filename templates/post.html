@@ -6,6 +6,7 @@
 {% endblock %}
 {% block content %} 
         <p style='font-family:微軟正黑體;letter-spacing:2pt;'>
+            {{post.image | safe}}<br><br>
             作者： {{post.author}}<br>
             出版日期： {{post.pub_date}}<br><br>
             章節： {{post.chap | convert_markdown | safe}}<br>
