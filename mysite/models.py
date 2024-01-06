@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Book(models.Model):
+    image = models.CharField(max_length=500)
     title = models.CharField(max_length=200)
     slug = models.CharField(max_length=200)
     chap = models.CharField(max_length=2000)
