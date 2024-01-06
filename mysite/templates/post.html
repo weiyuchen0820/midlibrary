@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load markdown_extras %}
+{% block title %} {{ post.title }} 書本資訊 {% endblock %}
+{% block headmessage %}
+    <h3 style='font-family: 微軟正黑體;'>{{ post.title }}</h3>
+{% endblock %}
+{% block content %} 
+    <div style='font-family: 微軟正黑體; letter-spacing: 2pt;'>
+        <p>作者： {{ post.author }}</p>
+        <p>出版日期： {{ post.pub_date }}</p>
+        <br>
+        <h5>章節：</h5>
+        <div>{{ post.chap | convert_markdown | safe }}</div>
+        <br>
+        <h5>內容簡介：</h5>
+        <div>{{ post.body | convert_markdown | safe }}</div>
+        <br>
+        <h5 style="font-weight: bold;">{{post.display_status}}</h5>
+    </div>
+    <br><br><br><br><br>
+    <a style='font-family: 微軟正黑體; text-align: right;' href='{% url "homepage" %}'>回首頁</a>
+{% endblock %}

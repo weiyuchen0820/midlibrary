@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %} 搜尋書籍 {% endblock title %}
+{% block headmessage %} 
+{% endblock headmessage %} 
+
+{% block content %}
+
+<form method="GET" action="{% url 'search_books' %}">
+  {{ form.as_p }}
+  <button type="submit">搜尋</button>
+</form>
+
+{% if books %}
+  <h2>搜尋结果：</h2>
+  <ul>
+      {% for book in books %}
+          <li><a href="{% url 'showpost' slug=book.slug %}">{{ book.title }} - {{ book.author }}</a></li>
+      {% endfor %}
+  </ul>
+{% elif search_query %}
+  <p>找不到相關書籍</p>
+{% endif %}
+
+{% endblock content %}

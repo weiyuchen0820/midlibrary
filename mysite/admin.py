@@ -4,4 +4,5 @@ from mysite.models import Book
 
 class bookAdmin(admin.ModelAdmin):
     list_display = ('title','slug','chap','author','body','pub_date')
+
 admin.site.register(Book, bookAdmin)

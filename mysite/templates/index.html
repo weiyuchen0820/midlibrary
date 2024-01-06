@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} 資管🐵圖書館 {% endblock %}
+{% block headmessage %} 
+    <h3 style='font-family: 微軟正黑體;'>資管🐵圖書館</h3>
+{% endblock %}
+{% block content %} 
+    {% for book in posts %}
+        <div class='card'>
+            <div class='card-header'>
+                <p style='font-family: 微軟正黑體; font-size: 14pt; font-weight: bold;'>
+                    <a href='{% url "showpost" slug=book.slug %}'>{{ book.title }}</a>
+                </p>
+            </div>
+
+            <div class='card-body' style='background-color: #ffffdd;'>
+                <!-- 顯示書籍摘要或內容 -->
+                <p>{{ book.body | truncatechars:50 }}</p>
+            </div> 
+
+            <div class='card-footer' style='background-color: #efefef;'>
+                <p>出版日期：{{ book.pub_date | date:"Y M d"}}</p>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock %}
