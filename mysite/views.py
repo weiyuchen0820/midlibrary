@@ -3,10 +3,10 @@ from mysite.models import Book, BorrowRecord
 from django.http import HttpResponse
 from datetime import datetime
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, LoginForm, BorrowForm, BookSearchForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import UserRegisterForm, LoginForm, BorrowForm, BookSearchForm, BookForm
 
-# 其他視圖函數...
+# 主畫面
 def homepage(request):
     posts = Book.objects.all()
     now = datetime.now()
@@ -18,12 +18,19 @@ def homepage(request):
 
     return render (request, 'index.html', locals())
 
+#書本的頁面
 def showpost(request,slug):
     post = Book.objects.get(slug=slug)
     return render(request, 'post.html', locals())
 
+#辨識是否為superuser
+def is_superuser(user):
+    return user.is_superuser
+
+
 from django.contrib.auth.models import User
 
+#註冊
 def register(request):
     if request.method == 'GET':
         form = UserRegisterForm()
@@ -49,6 +56,7 @@ from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.contrib.auth import logout
 
+#登入
 def login(request):
     if request.method == 'GET':
         form = LoginForm()
@@ -77,6 +85,7 @@ def login(request):
         message = "ERROR"
         return render(request, 'login.html', locals())
  
+#登出
 def user_logout(request):
     logout(request)
     # 重定向到登录页面或任何其他页面
@@ -105,6 +114,7 @@ def borrow_book(request, slug):
 
     return render(request, 'borrow_book.html', {'form': form, 'book': book})
 
+#搜尋
 @login_required
 def search_books(request):
     form = BookSearchForm(request.GET)
@@ -116,3 +126,41 @@ def search_books(request):
         books = Book.objects.filter(title__icontains=search_query)
 
     return render(request, 'search.html', {'form': form, 'books': books})
+
+@login_required
+@user_passes_test(is_superuser)
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'book_list.html', {'books': books})
+
+#新增書籍
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = BookForm()
+    return render(request, 'add_book.html', {'form': form})
+
+#編輯書籍資料
+def edit_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = BookForm(instance=book)
+    return render(request, 'edit_book.html', {'form': form})
+
+#刪除書籍
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('book_list')
+    return render(request, 'confirm_delete.html', {'book': book})
+

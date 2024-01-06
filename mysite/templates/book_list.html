@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} 書籍列表 {% endblock title %}
+{% block headmessage %} 
+{% endblock headmessage %} 
+
+{% block content %}
+
+<h2>書籍列表</h2>
+<ul>
+{% for book in books %}
+    <li style="list-style: none;">
+      {{ book.title }} - {{ book.author }}
+      <a href="{% url 'edit_book' book.id %}">編輯</a>
+      <a href="{% url 'delete_book' book.id %}">刪除</a>
+    </li>
+{% endfor %}
+</ul>
+<a href="{% url 'add_book' %}">新增書籍</a>
+
+{% endblock content %}

@@ -1,4 +1,5 @@
 from django import forms
+from .models import Book
 
 class UserRegisterForm(forms.Form):
     user_name = forms.CharField(label='您的帳號', max_length=50)
@@ -16,3 +17,8 @@ class BorrowForm(forms.Form):
 
 class BookSearchForm(forms.Form):
     search_query = forms.CharField(label='搜尋書籍', max_length=100)
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'slug', 'chap', 'author', 'body', 'pub_date']

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %} 新增書籍 {% endblock title %}
+{% block headmessage %} 
+{% endblock headmessage %} 
+
+{% block content %}
+
+<h1>新增書籍</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="新增">
+</form>
+
+{% endblock content %}
