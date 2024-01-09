@@ -10,6 +10,9 @@
                 <p style='font-family: 微軟正黑體; font-size: 14pt; font-weight: bold;'>
                     <a href='{% url "showpost" slug=book.slug %}'>{{ book.title }}</a>
                 </p>
+                <p style="font-family: 微軟正黑體; font-size: 12pt; font-weight: bold; color: #FFF4C1; margin-left: 1px;">
+                    {{book.formatted_status|safe}}
+                </p>
             </div>
 
             <div class='card-body' style='background-color: #ffffdd;'>

@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, reverse
 from mysite.models import Book, BorrowRecord
 from django.http import HttpResponse
 from datetime import datetime
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import UserRegisterForm, LoginForm, BorrowForm, BookSearchForm, BookForm
 
@@ -21,14 +22,11 @@ def homepage(request):
 #書本的頁面
 def showpost(request,slug):
     post = Book.objects.get(slug=slug)
-    return render(request, 'post.html', locals())
+    return render(request, 'post.html', {'post': post, 'book': post})
 
 #辨識是否為superuser
 def is_superuser(user):
     return user.is_superuser
-
-
-from django.contrib.auth.models import User
 
 #註冊
 def register(request):
@@ -91,28 +89,45 @@ def user_logout(request):
     # 重定向到登录页面或任何其他页面
     return redirect('/')
 
+#借還書系統
+def rent_book(request):
+    books = Book.objects.all()
+    return render(request, 'rent_book.html', {'books': books})
+
+#借書
 @login_required
-def borrow_book(request, slug):
-    book = get_object_or_404(Book, slug=slug)
+def borrow_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
 
-    # 处理借書表單提交
-    if request.method == 'POST':
-        form = BorrowForm(request.POST)
-        if form.is_valid():
-            borrower_name = form.cleaned_data['borrower_name']
-            return_date = form.cleaned_data['return_date']
+    book.status = '可借閱'
+    book.save()
+    return redirect('rent_book')
 
-            # 處理借書邏輯
-            # 創建借書紀錄，更新書籍狀態等
-            # 記得處理書籍已被借光或者用户借書超過限制的情況
-            # ...
+'''
+    if not book.status:
+        book.status = 'borrowed'
+        book.save()
 
-            messages.success(request, f"You, {borrower_name}, have borrowed {book.title} successfully!")
-            return redirect('homepage')
-    else:
-        form = BorrowForm()
+    return HttpResponseRedirect(reverse('rent_book'))
+'''
 
-    return render(request, 'borrow_book.html', {'form': form, 'book': book})
+
+#還書
+def return_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+
+    book = get_object_or_404(Book, pk=book_id)
+    book.status = '外借中'
+    book.save()
+    return redirect('rent_book')
+
+'''
+    if book.status:
+        book.status = 'available'
+        book.save()
+
+    return HttpResponseRedirect(reverse('rent_book'))
+'''
 
 #搜尋
 @login_required
@@ -122,7 +137,6 @@ def search_books(request):
 
     if form.is_valid():
         search_query = form.cleaned_data['search_query']
-        # 在 Book 模型中执行搜索
         books = Book.objects.filter(title__icontains=search_query)
 
     return render(request, 'search.html', {'form': form, 'books': books})

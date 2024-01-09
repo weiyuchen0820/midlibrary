@@ -16,6 +16,15 @@ class Book(models.Model):
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
 
+    @property
+    def formatted_status(self):
+        if self.status:
+            return '<span style="color: black; border: 1px solid green;padding: 3px; border-radius: 5px;">館藏中</span>'
+        else:
+            return '<span style="color: black; border: 1px solid red; padding: 3px; border-radius: 5px;">外借中</span>'
+
+    formatted_status.fget.short_description = "外借狀態"
+
     class Meta:
         ordering = ('-pub_date', )
 

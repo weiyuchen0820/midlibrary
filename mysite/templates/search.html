@@ -11,10 +11,9 @@
 </form>
 
 {% if books %}
-  <h2>搜尋结果：</h2>
   <ul>
       {% for book in books %}
-          <li><a href="{% url 'showpost' slug=book.slug %}">{{ book.title }} - {{ book.author }}</a></li>
+          <li style="list-style: none;"><a href="{% url 'showpost' slug=book.slug %}">{{ book.title }} - {{ book.author }}</a></li>
       {% endfor %}
   </ul>
 {% elif search_query %}
