@@ -99,35 +99,24 @@ def rent_book(request):
 def borrow_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
 
-    book.status = '可借閱'
-    book.save()
-    return redirect('rent_book')
-
-'''
     if not book.status:
-        book.status = 'borrowed'
+        book.status = True
         book.save()
 
     return HttpResponseRedirect(reverse('rent_book'))
-'''
+
 
 
 #還書
 def return_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
 
-    book = get_object_or_404(Book, pk=book_id)
-    book.status = '外借中'
-    book.save()
-    return redirect('rent_book')
-
-'''
     if book.status:
-        book.status = 'available'
+        book.status = False
         book.save()
 
     return HttpResponseRedirect(reverse('rent_book'))
-'''
+
 
 #搜尋
 @login_required

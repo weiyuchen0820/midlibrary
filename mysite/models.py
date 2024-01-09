@@ -9,19 +9,14 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     body = models.TextField(null=False, blank=True)
     pub_date = models.DateField()
-
-    STATUS_CHOICES = (
-        ('available', '館藏中'),
-        ('borrowed', '外借中')
-    )
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
+    status = models.BooleanField(("外借中"), default=False)
 
     @property
     def formatted_status(self):
         if self.status:
-            return '<span style="color: black; border: 1px solid green;padding: 3px; border-radius: 5px;">館藏中</span>'
+            return '<span style="color: white; background-color: green; border: 1px solid white;padding: 3px; border-radius: 3px;">可借閱</span>'
         else:
-            return '<span style="color: black; border: 1px solid red; padding: 3px; border-radius: 5px;">外借中</span>'
+            return '<span style="color: white; background-color: red; border: 1px solid white; padding: 3px; border-radius: 3px;">外借中</span>'
 
     formatted_status.fget.short_description = "外借狀態"
 
