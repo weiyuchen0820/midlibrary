@@ -14,9 +14,9 @@ class Book(models.Model):
     @property
     def formatted_status(self):
         if self.status:
-            return '<span style="color: white; background-color: green; border: 1px solid white;padding: 3px; border-radius: 3px;">可借閱</span>'
+            return '<span style="color: black; border: 1px solid green;padding: 3px; border-radius: 8px;">可借閱</span>'
         else:
-            return '<span style="color: white; background-color: red; border: 1px solid white; padding: 3px; border-radius: 3px;">外借中</span>'
+            return '<span style="color: black; border: 1px solid red; padding: 3px; border-radius: 8px;">外借中</span>'
 
     formatted_status.fget.short_description = "外借狀態"
 
