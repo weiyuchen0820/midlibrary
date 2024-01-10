@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} {{ post.title }} 借還書系統 {% endblock %}
 {% block headmessage %}
     <div class="card" style="background-color:#FFA042;">
@@ -19,6 +20,23 @@
                     <div>
                         <strong>{{ book.title }}</strong> - {{ book.author }}
                         {% if book.status %}
+                            <span id="status-badge-{{ book.id }}" class="badge bg-success">可借閱</span>
+                        {% else %}
+                            <span id="status-badge-{{ book.id }}" class="badge bg-danger">外借中</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-primary btn-sm borrow-button" data-bookid="{{ book.id }}">我要借書</a>
+                        <a href="#" class="btn btn-warning btn-sm return-button" data-bookid="{{ book.id }}">我要還書</a>
+                    </div>
+                </li>
+    {% endfor %}
+            <!--
+            {% for book in books %}
+                <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color:#FFF4C1;">
+                    <div>
+                        <strong>{{ book.title }}</strong> - {{ book.author }}
+                        {% if book.status %}
                             <span class="badge bg-success">可借閱</span>
                         {% else %}
                             <span class="badge bg-danger">外借中</span>
@@ -30,9 +48,14 @@
                     </div>
                 </li>
             {% endfor %}
+            -->
         </ul>
     {% else %}
         <p>No books available.</p>
     {% endif %}
     <a class="btn btn-sm" style="background-color:#842B00; color: #FFF4C1; margin-top: 10px;" href='/'>回首頁</a>
+    <!-- 引用 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/book_rent.js' %}"></script>
+    {% csrf_token %}
 {% endblock %}
